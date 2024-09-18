@@ -30,7 +30,7 @@ class SeatFinder:
                         By.XPATH, '//*[@id="divSeatArray"]/div[string-length(@title)>0 and not(contains(@class, "s13"))]'))
                 print(f"찾은 요소: {target.text}")
                 # 원하는 작업 수행 (예: 클릭)
-
+                break
             except NoSuchElementException:
                 # 요소를 찾지 못했을 때
                 print("요소를 찾지 못했습니다. 다시 시도 중...")

@@ -194,12 +194,23 @@ driver.find_element(By.ID, 'deliveryMobile3').send_keys('5678')
 
 driver.find_element(By.XPATH,'//*[@id="StepCtrlBtn04"]/a[2]/img').click()
 
+#결제방법
+driver.find_element(By.XPATH,'//*[@id="rdoPays22"]').click()  #무통장 입금
+select = Select(driver.find_element(By.XPATH,'//*[@id="selBank"]'))
+select.select_by_index(1)
+
+
 #이미지 분석
 time.sleep(3)
 code = connect_open_ai(driver.get_screenshot_as_base64())
 
 driver.find_element(By.ID, 'captchaText').clear()  # 기존 입력 값 제거
 driver.find_element(By.ID, 'captchaText').send_keys(code)
+
+# 예매하기
+driver.find_element(By.XPATH,'//*[@id="cbxAllAgree"]').click()
+driver.find_element(By.XPATH,'//*[@id="imgPayEnd"]').click()
+
 
 
 # while True:
