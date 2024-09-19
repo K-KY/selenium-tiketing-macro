@@ -22,6 +22,22 @@ import time
 
 from seleniumMacro.SeatFinder import SeatFinder
 
+print("1. 카카오 로그인, 2. 일반 로그인")
+login_method = input("로그인 방법을 입력하세요: ")
+login_method = int(login_method)
+
+# ticket_address = input("예매할 공연 url(주소)을 입력하세요: ")
+ticket_day = input("예매할 날짜 입력: ")
+id = input("아이디를 입력하세요: ")
+print("입력한 아이디", id)
+password = input("비밀번호를 입력하세요: ")
+print("입력한 비밀번호", password)
+print("제대로 입력, 이걸로 에러나면 책임 안짐")
+emergency_number1 = input("긴급 전화번호 ^###^ - #### - ####: ")
+emergency_number2 = input("긴급 전화번호: |###| - ^####^ - ####: ")
+emergency_number3 = input("긴급 전화번호: |###| - |####| - ^####^: ")
+print("입력한 긴급 전화번호", ", " , emergency_number1, emergency_number2, emergency_number3)
+
 # 브라우저 꺼짐 방지 옵션
 chrome_options = Options()
 chrome_options.add_experimental_option("detach", True)
@@ -42,30 +58,40 @@ driver.find_element(By.TAG_NAME,'body').send_keys(Keys.PAGE_DOWN)
 
 # 로그인
 driver.find_element(By.XPATH,'//*[@id="consiceLogin"]').click()
-driver.find_element(By.XPATH,'//*[@id="FBLoginSub_aBtnKakaoLogin"]').click()
-
-time.sleep(1)
-print('--------------------')
-print(driver.window_handles)
 main_window = driver.current_window_handle
-all_windows = driver.window_handles
 
-# 새로 열린 팝업 창으로 전환
-for window in all_windows:
-    if window != main_window:
-        driver.switch_to.window(window)
-        break
+if login_method == 1:
+    driver.find_element(By.XPATH,'//*[@id="FBLoginSub_aBtnKakaoLogin"]').click()
+    time.sleep(1)
+    print('--------------------')
+    print(driver.window_handles)
+    main_window = driver.current_window_handle
+    all_windows = driver.window_handles
 
-userId = driver.find_element(By.ID, 'loginId--1')
-userId.send_keys('kyuyoungk@nate.com')
-userPwd = driver.find_element(By.ID, "password--2")
-userPwd.send_keys('dkdldndp5')
-userPwd.send_keys(Keys.ENTER)
+    # 새로 열린 팝업 창으로 전환
+    for window in all_windows:
+        if window != main_window:
+            driver.switch_to.window(window)
+            break
 
-time.sleep(2)
+    userId = driver.find_element(By.ID, 'loginId--1')
+    userId.send_keys(id)
+    userPwd = driver.find_element(By.ID, "password--2")
+    userPwd.send_keys(password)
+    userPwd.send_keys(Keys.ENTER)
 
+    time.sleep(2)
+    driver.switch_to.window(main_window)
 
-driver.switch_to.window(main_window)
+if login_method == 2:
+    print("일반 로그인")
+    userId = driver.find_element(By.ID, 'SMemberID')
+    userId.send_keys(id)
+    userPwd = driver.find_element(By.ID, "SMemberPassword")
+    userPwd.send_keys(password)
+    userPwd.send_keys(Keys.ENTER)
+    time.sleep(2)
+
 time.sleep(1)
 
 # 티켓 사이트 이동 d6
@@ -130,8 +156,6 @@ while True:
         day_selector()
         stand = standing_finder()
         fixed = fixed_finder()
-        driver.refresh()
-        time.sleep(1)
         if stand is not None or fixed is not None:
             if stand is not None:
                 stand.click()
@@ -139,6 +163,9 @@ while True:
             if fixed is not None:
                 fixed.click()
             break  # 루프 탈출
+        driver.refresh()
+        time.sleep(1)
+
 
     except UnexpectedAlertPresentException:
         ## 발생시 예매버튼부터 다시 시작
@@ -173,26 +200,28 @@ time.sleep(2)
 
 # 긴급 전화번호 압력
 driver.find_element(By.ID, 'ordererMobile1').clear()  # 기존 입력 값 제거
-driver.find_element(By.ID, 'ordererMobile1').send_keys('010')
+driver.find_element(By.ID, 'ordererMobile1').send_keys(emergency_number1)
 
 driver.find_element(By.ID, 'ordererMobile2').clear()  # 기존 입력 값 제거
-driver.find_element(By.ID, 'ordererMobile2').send_keys('7182')
+driver.find_element(By.ID, 'ordererMobile2').send_keys(emergency_number2)
 
 driver.find_element(By.ID, 'ordererMobile3').clear()  # 기존 입력 값 제거
-driver.find_element(By.ID, 'ordererMobile3').send_keys('1508')
+driver.find_element(By.ID, 'ordererMobile3').send_keys(emergency_number2)
 
-# 배송지 전화번호 입력
+# # 배송지 전화번호 입력
+#
+# driver.find_element(By.ID, 'deliveryMobile1').clear()  # 기존 입력 값 제거
+# driver.find_element(By.ID, 'deliveryMobile1').send_keys('010')
+#
+# driver.find_element(By.ID, 'deliveryMobile2').clear()  # 기존 입력 값 제거
+# driver.find_element(By.ID, 'deliveryMobile2').send_keys('1234')
+#
+# driver.find_element(By.ID, 'deliveryMobile3').clear()  # 기존 입력 값 제거
+# driver.find_element(By.ID, 'deliveryMobile3').send_keys('5678')
+#
+# driver.find_element(By.XPATH,'//*[@id="StepCtrlBtn04"]/a[2]/img').click()
+#
 
-driver.find_element(By.ID, 'deliveryMobile1').clear()  # 기존 입력 값 제거
-driver.find_element(By.ID, 'deliveryMobile1').send_keys('010')
-
-driver.find_element(By.ID, 'deliveryMobile2').clear()  # 기존 입력 값 제거
-driver.find_element(By.ID, 'deliveryMobile2').send_keys('1234')
-
-driver.find_element(By.ID, 'deliveryMobile3').clear()  # 기존 입력 값 제거
-driver.find_element(By.ID, 'deliveryMobile3').send_keys('5678')
-
-driver.find_element(By.XPATH,'//*[@id="StepCtrlBtn04"]/a[2]/img').click()
 
 #결제방법
 driver.find_element(By.XPATH,'//*[@id="rdoPays22"]').click()  #무통장 입금
