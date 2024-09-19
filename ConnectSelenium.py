@@ -27,7 +27,7 @@ login_method = input("로그인 방법을 입력하세요: ")
 login_method = int(login_method)
 
 # ticket_address = input("예매할 공연 url(주소)을 입력하세요: ")
-ticket_day = input("예매할 날짜 입력: ")
+# ticket_day = input("예매할 날짜 입력: ")
 id = input("아이디를 입력하세요: ")
 print("입력한 아이디", id)
 password = input("비밀번호를 입력하세요: ")
@@ -40,6 +40,7 @@ print("입력한 긴급 전화번호", ", " , emergency_number1, emergency_numbe
 
 # 브라우저 꺼짐 방지 옵션
 chrome_options = Options()
+# chrome_options.add_argument('--headless')
 chrome_options.add_experimental_option("detach", True)
 
 driver = webdriver.Chrome(options=chrome_options)  # 'chrome_options' 대신 'options' 사용
